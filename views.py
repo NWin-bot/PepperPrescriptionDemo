@@ -6,10 +6,10 @@ views = Blueprint(__name__, "views")
 @views.route("/", methods=["POST","GET"])
 def home():
     if request.method=='POST':
-        f=request.files["image"]
-        filename=f.filename
+        file_hold=request.files["image"]
+        filename=file_hold.filename
         Path=os.path.join("static/uploads",filename)
-        f.save(Path)
+        file_hold.save(Path)
         return render_template('index.html',upload_hold=True,img_name=filename)
     return render_template('index.html',upload_hold=False,img_name="")
 
