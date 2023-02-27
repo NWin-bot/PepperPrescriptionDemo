@@ -52,8 +52,18 @@
 
           {% if upload_hold %}  
           <div class="card">
-            <h2>Prediction & Treatment</h2>
-            <img src="{{url_for('static',filename='uploads/')}}{{img_name}}" alt="pepperprescription" width="150" height="150">
+            <img class="img-pos" src="{{url_for('static',filename='uploads/')}}{{img_name}}" alt="pepperprescription" width="150" height="150">
+            <p>Prediction: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum nisl purus, 
+              pulvinar vel massa eget, blandit ultricies lectus. Pellentesque dictum ornare urna, et congue magna hendrerit eu. 
+              Vivamus semper nulla risus, vel feugiat eros eleifend eget. Duis non leo at justo placerat consectetur in id massa. In non tellus quis nulla imperdiet rutrum. 
+              Sed vel aliquet tellus, venenatis convallis sem. Mauris imperdiet faucibus lorem, nec dapibus tellus mattis at. Pellentesque aliquet auctor odio, a tristique dui finibus sit amet. 
+              Etiam et lobortis ligula, quis blandit arcu. Etiam id lacinia arcu. Vestibulum arcu mauris, rhoncus sit amet sodales vitae, pulvinar at massa. Quisque nec fermentum mauris, eu lacinia risus. 
+              Nam bibendum volutpat mi eget vulputate. In consectetur finibus varius. Nunc ac leo in velit bibendum accumsan.</p>
+
+            <p>Treatment: Pellentesque enim magna, laoreet accumsan metus ac, tempor lacinia nunc. Nullam vehicula ipsum tellus, ut aliquam sapien sagittis aliquet. 
+              In ac est nisl. Aliquam erat volutpat. Nulla condimentum ante at eros condimentum rhoncus. Nulla dapibus in nibh et elementum. Morbi feugiat pulvinar augue ut placerat. 
+              Quisque consequat sed lectus eu euismod.</p>
+
             
           </div>
           {% endif %}

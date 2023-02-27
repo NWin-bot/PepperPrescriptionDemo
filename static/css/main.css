@@ -97,3 +97,6 @@ body {
   display:inline;
 }
 
+.img-pos{
+  float: left;
+}
