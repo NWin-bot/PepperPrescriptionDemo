@@ -78,11 +78,6 @@ def login():
     return render_template('login.html', form=form)
 
 
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    return render_template('index.html')
-
 
 @app.route('/logout')
 @login_required
@@ -106,7 +101,7 @@ def register():
 
 @app.route("/dashboard", methods=["POST","GET"])
 @login_required
-def index_page():
+def dashboard():
     if request.method=='POST':
         file_hold=request.files["image"]
         filename=file_hold.filename
