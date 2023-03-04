@@ -47,7 +47,21 @@
                 {{ form.submit(class="btn btn-success custom") }}
             </form>
 
-            <a href="{{ url_for('register') }}">Don't have an account? Sign Up</a>
+
+            <p>
+            {% with messages = get_flashed_messages() %}
+            <br>
+            {% if messages %}
+              {% for message in messages %}
+                {{ message }}
+              {% endfor %}
+              {% endif %}
+              <br>
+              {% endwith %}
+            </p>
+              
+
+            <a href="{{ url_for('signup') }}">Don't have an account? Sign Up</a>
                     
             </div>
   

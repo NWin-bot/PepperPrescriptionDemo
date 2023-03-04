@@ -1,6 +1,6 @@
 from flask import Flask, flash, render_template, url_for, redirect, request
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
@@ -31,7 +31,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
 
 
-class RegisterForm(FlaskForm):
+class SignUpForm(FlaskForm):
     email = StringField(validators=[
                            InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Email"})
     username = StringField(validators=[
@@ -40,14 +40,14 @@ class RegisterForm(FlaskForm):
     password = PasswordField(validators=[
                              InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
 
-    submit = SubmitField('Register')
+    submit = SubmitField('Sign Up')
 
     def validate_email(self, email):
         existing_user_email = User.query.filter_by(
             email=email.data).first()
         if existing_user_email:
             raise ValidationError(
-                'That email is already in use. Please choose a different one.')
+                'This email is already in use!')
 
 
 class LoginForm(FlaskForm):
@@ -59,6 +59,7 @@ class LoginForm(FlaskForm):
 
     submit = SubmitField('Login')
 
+login_manager.login_message = u"You must login to access this page!"
 
 @app.route('/')
 def home():
@@ -73,8 +74,12 @@ def login():
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
-                flash('Login successful for {form.email.data}')
                 return redirect(url_for('dashboard'))
+            else: flash('Incorrect Password!')
+            return render_template('login.html', form=form)
+        else:
+            flash('Email not in database!')
+            return render_template('login.html', form=form)
     return render_template('login.html', form=form)
 
 
@@ -86,9 +91,9 @@ def logout():
     return redirect(url_for('login'))
 
 
-@ app.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegisterForm()
+@ app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form = SignUpForm()
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
@@ -97,7 +102,7 @@ def register():
         db.session.commit()
         return redirect(url_for('login'))
 
-    return render_template('register.html', form=form)
+    return render_template('signup.html', form=form)
 
 @app.route("/dashboard", methods=["POST","GET"])
 @login_required
@@ -128,4 +133,4 @@ def go_to_aboutus():
 
 if __name__ == "__main__":
     db.create_all()
-    app.run(debug=True)
+    app.run(port=8000, debug=True)
