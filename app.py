@@ -91,7 +91,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-@ app.route('/signup', methods=['GET', 'POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = SignUpForm()
 
