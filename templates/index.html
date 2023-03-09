@@ -5,11 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Load Bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
-        integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I"
-        crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" >
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <title>{% block title %}{% endblock %} Pepper Prescription</title>
+    <title>{% block title %}Dashboard{% endblock %} - Pepper Prescription</title>
 </head>
 <body style="background:#5fa468">
     <div class="header">
@@ -18,7 +17,7 @@
       <div class="container">
 
       <div class="topleft2">
-        Logged in: {{current_user.username}}
+        <b>Logged in: {{current_user.username}}</b>
         </div>
       
       <div class="topright">
@@ -32,14 +31,41 @@
       
     </div>
     
-    <div class="topnav">
-        <a href="{{ url_for('dashboard') }}">Dashboard</a>
-        <a href="{{ url_for('go_to_plants') }}">Plants</a>
-        <a href="{{ url_for('go_to_diseases') }}">Diseases</a>
-        <a href="{{ url_for('go_to_aboutus') }}" style="float:right">About Us</a>
-      </div>
-     
 
+     
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('dashboard') }}">Dashboard</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('go_to_plants') }}">Plants</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('go_to_diseases') }}">Diseases</a>
+            </li>
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Profile
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" href="{{ url_for('go_to_profile') }}">View Profile</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('go_to_history') }}">View History</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{ url_for('go_to_aboutus') }}">About Us</a></li>
+              </ul>
+            </li>
+        
+          </ul>
+        </div>
+      </div>
+    </nav>
     
     
     
@@ -63,7 +89,7 @@
 
           {% if upload_hold %}  
           <div class="card">
-            <img class="img-pos" src="{{url_for('static',filename='uploads/')}}{{img_name}}" alt="pepperprescription" width="150" height="150">
+            <img class="img-pos" src="{{url_for('static',filename='uploads/')}}{{current_user.email}}/{{img_name}}" alt="pepperprescription" width="150" height="150">
             <p>Plant Name: Lorem ipsum</p>
 
             <p>Disease Type: Pellentesque enim magna, laoreet accumsan metus ac, tempor lacinia nunc. Nullam vehicula ipsum tellus, ut aliquam sapien sagittis aliquet. 

@@ -1,0 +1,51 @@
+{% extends "index.html" %}
+
+{% block title %} History {% endblock %}
+
+
+{% block content %}
+
+<div class="leftcolumn" style="width:100%">
+
+  <div class="card" style="background:#ddd">
+    <div style="overflow-x: auto;">
+    
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th scope="col">Date/Time</th>
+            <th scope="col">Image</th>
+            <th scope="col">Prediction</th>
+            <th scope="col">Disease</th>
+            <th scope="col">Treatment</th>
+          </tr>
+        </thead>
+        <tbody>
+      {% for session in user.sessions|reverse %}
+      <tr>
+        <td>{{ session.date }}
+          <br>
+          <a href="/delete/{{session.id}}" class="btn-outline-danger btn-sm">Delete</a>
+
+        </td>
+        <td><img src="{{url_for('static',filename='uploads/')}}{{current_user.email}}/{{session.image}}" width="60" height="60"><br> {{ session.image }}</td>
+        <td>{{ session.prediction }}</td>
+        <td>{{ session.disease }}</td>
+        <td>{{ session.treatment }}</td>
+      </tr>
+      {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+    
+  </div>
+
+  
+    
+    
+  </div>
+ 
+   
+
+{% endblock %}

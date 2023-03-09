@@ -16,30 +16,7 @@ body {
 }
 
 
-
-/* Style the top navigation bar */
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
-
-/* Style the topnav links */
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-/* Change color on hover */
-.topnav a:hover {
-  background-color: #ede6e6;
-  color: black;
-}
-
-
+/* Left column */
 .leftcolumn {   
   float: left;
   width: 75%;
@@ -82,13 +59,6 @@ body {
   }
 }
 
-/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
-@media screen and (max-width: 400px) {
-  .topnav a {
-    float: none;
-    width: 100%;
-  }
-}
 
 /* Social Media Links */
 
@@ -141,4 +111,15 @@ body {
 
 .custom {
   width: 100px !important;
+}
+
+table, th, td {
+  border:1px solid black;
+  width: 20%;
+}
+
+.profile_attributes{
+  background:white;
+  width:100%;
+  text-align:center;
 }
