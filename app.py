@@ -163,8 +163,10 @@ def go_to_aboutus():
 @app.route('/history')
 @login_required
 def go_to_history():
+    page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(email=current_user.email).first()
-    return render_template('history.html',user=user)
+    sessions = Session.query.filter_by(user=user).order_by(Session.id.desc()).paginate(page=page, per_page=3)
+    return render_template('history.html',sessions=sessions)
 
 #Route deletes upload from history page.
 #Clicking of delete button in history.html initiates use of route.

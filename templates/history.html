@@ -21,7 +21,7 @@
           </tr>
         </thead>
         <tbody>
-      {% for session in user.sessions|reverse %}
+      {% for session in sessions.items %}
       <tr>
         <td>{{ session.date }}
           <br>
@@ -37,15 +37,23 @@
         </tbody>
       </table>
 
+      {% for page_num in sessions.iter_pages(left_edge=1, right_edge=1,
+        left_current=1, right_current=2) %} {% if page_num %} {% if sessions.page == page_num %}
+        <a class="btn btn-success" href="{{ url_for('go_to_history', page=page_num) }}">{{ page_num }}</a>
+        {% else %}
+        <a class="btn btn-outline-success" href="{{ url_for('go_to_history', page=page_num) }}">{{ page_num }}</a>
+        {% endif %} {% else %} ... {% endif %} {% endfor %}
+        <br>
+        <br>
+        <p>
+          Showing page {{ sessions.page }} of {{ sessions.pages }}
+       </p>
+
     </div>
     
   </div>
-
-  
-    
     
   </div>
  
    
-
 {% endblock %}
