@@ -138,14 +138,14 @@ def dashboard():
         if not os.path.exists(user_folder):
            os.makedirs(user_folder)
         #--------------------------------------------------------------------------
-        #Saving of sumbitted file to user directory.
+        #Saving of submitted file to user directory.
         filename2 = "/".join([current_user.email, filename])
         Path=os.path.join(app.config['UPLOAD_FOLDER'], filename2)
         file_hold.save(Path)
         #--------------------------------------------------------
         userr = User.query.filter_by(email=current_user.email).first()
         now = datetime.now()
-        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        dt_string = now.strftime("%Y/%m/%d %H:%M %p")
         session = Session(date=dt_string,prediction='',disease='',treatment='',image=filename,user=userr)
         db.session.add(session)
         db.session.commit()
@@ -165,6 +165,9 @@ def go_to_aboutus():
 def go_to_history():
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(email=current_user.email).first()
+    #Querying of session model to only return the currents user sessions by id.
+    #The sorting of the sessions in descending order, the most recent upload will be displayed first.
+    #The use of pagination to display 3 post per page.
     sessions = Session.query.filter_by(user=user).order_by(Session.id.desc()).paginate(page=page, per_page=3)
     return render_template('history.html',sessions=sessions)
 
