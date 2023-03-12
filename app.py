@@ -132,13 +132,13 @@ def dashboard():
     if request.method=='POST':
         file_hold=request.files['image']
         filename=file_hold.filename
-        #Creation of user folder in static/uploads to store submitted jpg files.
+        #Building of user folder path in static/uploads to store submitted jpg files.
         user_folder = os.path.join(app.config['UPLOAD_FOLDER'], current_user.email)
-        #Creation of user folder only if it doesn't already exist.
+        #Creation of user folder path only if it doesn't already exist.
         if not os.path.exists(user_folder):
            os.makedirs(user_folder)
         #--------------------------------------------------------------------------
-        #Saving of submitted file to user directory.
+        #Saving of submitted file to user folder path.
         filename2 = "/".join([current_user.email, filename])
         Path=os.path.join(app.config['UPLOAD_FOLDER'], filename2)
         file_hold.save(Path)

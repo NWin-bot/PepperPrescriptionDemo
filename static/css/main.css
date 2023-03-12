@@ -47,11 +47,17 @@ body {
 .footer {
   padding: 20px;
   text-align: center;
-  background: white;
+  background: #fff;
   margin-top: 20px;
+  position: sticky;
+  bottom: 0;
+  right:0;
+  left:0;
+  width: 100%;
 }
 
-/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other. */
 @media screen and (max-width: 800px) {
   .leftcolumn, .rightcolumn {   
     width: 100%;
@@ -60,15 +66,19 @@ body {
 }
 
 
+/* Responsive layout - when the screen is more than 500px wide and the height is more than 800px, make the prescriptionlogo height 400px. */
+@media screen and (min-height: 800px) and (min-width: 500px) {
+  .prescriptionlogo {   
+    height:300px;
+  }
+}
+
 /* Social Media Links */
 
 .socialmediaview {
   display:inline;
 }
 
-.img-pos{
-  float: left;
-}
 
 /* Login & Registration Page Cards */
 
@@ -85,12 +95,16 @@ body {
   position: relative;
 }
 
+/* Back Button is at top left of screen*/
+
 .topleft {
   position: absolute;
   top: -20px;
   left: -25px;
   font-size: 18px;
 }
+
+/* current_username is at top left of screen*/
 
 .topleft2 {
   position: absolute;
@@ -99,6 +113,8 @@ body {
   font-size: 18px;
   background:#ddd;
 }
+
+/* Logout Button is at top right of screen*/
 
 .topright {
   position: absolute;
