@@ -66,7 +66,7 @@ body {
 }
 
 
-/* Responsive layout - when the screen is more than 500px wide and the height is more than 800px, make the prescriptionlogo height 400px. */
+/* Responsive layout - when the screen is more than 500px wide and the height is more than 800px, make the prescriptionlogo height 300px. */
 @media screen and (min-height: 800px) and (min-width: 500px) {
   .prescriptionlogo {   
     height:300px;

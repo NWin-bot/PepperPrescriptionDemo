@@ -181,7 +181,7 @@ def delete_from_history(id):
     db.session.commit()
     return redirect('/history')
 
-#Displays myprofile route to logged in user.
+#Displays profile route to logged in user.
 @app.route('/profile')
 @login_required
 def go_to_profile():
