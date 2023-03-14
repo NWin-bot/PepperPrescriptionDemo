@@ -8,7 +8,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(20), nullable=False, unique=True)
     username = db.Column(db.String(20), nullable=False)
-    password = db.Column(db.String(80), nullable=False)
+    password = db.Column(db.String(20), nullable=False)
     sessions = db.relationship('Session', backref='user')
 
 #Class model and data types
