@@ -1,21 +1,20 @@
 from flask import Flask, flash, render_template, url_for, redirect, request, session
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError, Email
+from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
 from datetime import datetime, timedelta
+from models import db, User, Session
+from forms import SignUpForm, LoginForm
 import os
 
+
 app = Flask(__name__)
-db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
 app.permanent_session_lifetime = timedelta(minutes=60)
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
-
+db.app = app
+db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -26,56 +25,6 @@ login_manager.login_view = 'login'
 # get id from session,then retrieve user object from database with peewee query
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-#User model and data types.
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(20), nullable=False, unique=True)
-    username = db.Column(db.String(20), nullable=False)
-    password = db.Column(db.String(80), nullable=False)
-    sessions = db.relationship('Session', backref='user')
-
-#Class model and data types
-class Session(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Text)
-    prediction = db.Column(db.String(50))
-    disease = db.Column(db.String(50))
-    treatment = db.Column(db.Text)
-    image = db.Column(db.Text)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-
-#SignUp Form and fields.
-class SignUpForm(FlaskForm):
-    email = StringField(validators=[
-                           InputRequired(), Length(min=4, max=20),Email(message="Invalid Email!")], render_kw={"placeholder": "Email"})
-    
-    username = StringField(validators=[
-                           InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
-
-    password = PasswordField(validators=[
-                           InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
-
-    submit = SubmitField('Sign Up')
-    
-    #Email validation, prevents duplicate emails.
-    def validate_email(self, email):
-        existing_user_email = User.query.filter_by(
-            email=email.data).first()
-        if existing_user_email:
-            raise ValidationError(
-                'This email is already in use!')
-
-#Login Form and fields.
-class LoginForm(FlaskForm):
-    email = StringField(validators=[
-                           InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Email"})
-
-    password = PasswordField(validators=[
-                             InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
-
-    submit = SubmitField('Login')
 
 #Displayed if user attempts to modify URL to access page without being logged in.
 login_manager.login_message = u"You must login to access this page!"
