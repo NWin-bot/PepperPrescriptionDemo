@@ -49,7 +49,7 @@ body {
   text-align: center;
   background: #fff;
   margin-top: 20px;
-  position: sticky;
+  position: relative;
   bottom: 0;
   right:0;
   left:0;
@@ -104,7 +104,7 @@ body {
   font-size: 18px;
 }
 
-/* current_username is at top left of screen*/
+/* Username of current user is at top left of screen*/
 
 .topleft2 {
   position: absolute;
@@ -114,6 +114,14 @@ body {
   background:#ddd;
 }
 
+/* Delete button is at top left of div*/
+
+.topleft3 {
+  position: absolute;
+  top: -18px;
+  left: -6px;
+}
+
 /* Logout Button is at top right of screen*/
 
 .topright {
@@ -121,6 +129,14 @@ body {
   top: -20px;
   right: -25px;
   font-size: 18px;
+}
+
+/* Select per_page amount is at top right of div*/
+
+.topright2 {
+  position: absolute;
+  top: -18px;
+  right: -6px;
 }
 
 /* All Buttons Are set to same size */

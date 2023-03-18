@@ -114,22 +114,37 @@ def go_to_aboutus():
 @login_required
 def go_to_history():
     page = request.args.get('page', 1, type=int)
+
+    #Enables dynamic pagination.
+    #Default value returns 5.
+    per_page = request.args.get('per_page', 5, type=int)
+
+    #Enables hiding of delete button and checkbox when show all is not selected.
+    #Default value returns false.
+    show = request.args.get('show', False, type=str)
+    #---------------------------------------------------------------------------
     user = User.query.filter_by(email=current_user.email).first()
+    sessionz = Session.query.filter_by(user=user).count()
     #Querying of session model to only return the currents user sessions by id.
     #The sorting of the sessions in descending order, the most recent upload will be displayed first.
-    #The use of pagination to display 3 post per page.
-    sessions = Session.query.filter_by(user=user).order_by(Session.id.desc()).paginate(page=page, per_page=3)
-    return render_template('history.html',sessions=sessions)
+    #The use of pagination to display selected number of post per page.
+    sessions = Session.query.filter_by(user=user).order_by(Session.id.desc()).paginate(page=page, per_page=per_page)
+    return render_template('history.html',sessions=sessions,num=per_page,num2=sessionz,show=show)
 
 #Route deletes upload from history page.
 #Clicking of delete button in history.html initiates use of route.
-@app.route('/delete/<int:id>')
+@app.route('/delete', methods=['POST','GET'])
 @login_required
-def delete_from_history(id):
-    session = Session.query.get(id)
-    db.session.delete(session)
-    db.session.commit()
-    return redirect('/history')
+def delete_from_history():
+    if request.method == 'POST': 
+     for id in request.form.getlist('mycheckbox'):
+      session = Session.query.get(id)
+      db.session.delete(session)
+      db.session.commit()
+     flash('')
+    user = User.query.filter_by(email=current_user.email).first()
+    sessionz = Session.query.filter_by(user=user).count()
+    return redirect(url_for('go_to_history', per_page=sessionz, show=True ))
 
 #Displays profile route to logged in user.
 @app.route('/profile')
