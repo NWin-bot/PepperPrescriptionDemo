@@ -95,7 +95,7 @@ def dashboard():
         #--------------------------------------------------------
         userr = User.query.filter_by(email=current_user.email).first()
         now = datetime.now()
-        dt_string = now.strftime("%Y/%m/%d %H:%M %p")
+        dt_string = now.strftime("%b/%d/%Y %-I:%M %p")
         session = Session(date=dt_string,prediction='',disease='',treatment='',image=filename,user=userr)
         db.session.add(session)
         db.session.commit()
@@ -125,7 +125,7 @@ def go_to_history():
     #---------------------------------------------------------------------------
     user = User.query.filter_by(email=current_user.email).first()
     sessionz = Session.query.filter_by(user=user).count()
-    #Querying of session model to only return the currents user sessions by id.
+    #Querying of session model to only return the current user sessions by id.
     #The sorting of the sessions in descending order, the most recent upload will be displayed first.
     #The use of pagination to display selected number of post per page.
     sessions = Session.query.filter_by(user=user).order_by(Session.id.desc()).paginate(page=page, per_page=per_page)
