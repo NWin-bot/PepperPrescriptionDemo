@@ -4,19 +4,62 @@
 
 {% block content %}
 
-<div class="leftcolumn">
-    <div class="card">
-     
+<div class="leftcolumn" style="width:100%">
+
+  
+
+  {% for item in diseases %}
+
+  {% autoescape false %}
+
+  <div class="card" style="background:#ddd">
+    
+    <h2>{{item.disease}}</h2>
+
+    <p><img src="{{item.image}}" width="150" height="150" alt="imagehold"></p>
+
+    <p>
+      <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsedescription{{item.disease}} aria-expanded="false" aria-controls=collapsedescription{{item.disease}}>
+        Description
+      </button>
+      <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsesymptom{{item.disease}} aria-expanded="false" aria-controls=collapsesymptom{{item.disease}}>
+        Symptoms
+      </button>
+      <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsetreatment{{item.disease}} aria-expanded="false" aria-controls=collapsetreatment{{item.disease}}>
+        Treatments
+      </button>
+    </p>
+      
+    
+    <div class="collapse" id=collapsedescription{{item.disease}}>
+      <div class="card card-body">
+        <h5><u>Description</u></h5>
+        {{item.description | replace("|", "<br><br>")}}
+      </div>
+    </div>
+
+    <div class="collapse" id=collapsesymptom{{item.disease}}>
+      <div class="card card-body">
+        <h5><u>Symptoms</u></h5>
+        {{item.symptom | replace("|", "<br><br>")}}
+      </div>
+    </div>
+
+    <div class="collapse" id=collapsetreatment{{item.disease}}>
+      <div class="card card-body">
+        <h5><u>Treatments</u></h5>
+        {{item.treatment | replace("|", "<br><br>")}}
+      </div>
     </div>
     
+    
+      
+    
   </div>
- 
-  <div class="rightcolumn">  
-    <div class="card">
-      
-      
-    </div>
-   
+
+  {% endautoescape %}
+
+  {% endfor %}
     
   </div>
 

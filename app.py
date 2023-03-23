@@ -2,9 +2,9 @@ from flask import Flask, flash, render_template, url_for, redirect, request, ses
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
 from datetime import datetime, timedelta
-from models import db, User, Session
+from models import db, User, Session, Disease
 from forms import SignUpForm, LoginForm
-import os
+import os, csv
 
 
 app = Flask(__name__)
@@ -16,6 +16,11 @@ app.permanent_session_lifetime = timedelta(minutes=60)
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 db.app = app
 db.init_app(app)
+
+#Creates and initalizes database. 
+#Only creates database if database.db is missing,
+#if not the existing database.db will be used.
+db.create_all()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -29,6 +34,7 @@ def load_user(user_id):
 
 #Displayed if user attempts to modify URL to access page without being logged in.
 login_manager.login_message = u"You must login to access this page!"
+
 
 #Home route, displays Buttons routed to Login & Sign Up.
 @app.route('/')
@@ -152,22 +158,36 @@ def delete_from_history():
 def go_to_profile():
     return render_template('profile.html')
 
-#Displays plants route to logged in user.
-@app.route('/plants')
-@login_required
-def go_to_plants():
-    return render_template('plants.html')
-
 #Displays diseases route to logged in user.
 @app.route('/diseases')
 @login_required
 def go_to_diseases():
-    return render_template('diseases.html')
+
+    num=Disease.query.count()
+
+    if num==0:
+        #Reading of diseases from csv to display on diseases.html.
+     with open('diseases.csv', 'r', encoding="utf-8") as diseases:
+       reader = csv.DictReader(diseases)
+
+       for line in reader:
+            db.session.add(
+        Disease(
+            disease=line['Disease'],
+            description=line['Description'],
+            symptom=line['Symptom'],
+            treatment=line['Treatment'],
+            image=line['Image']
+        )
+        )
+            
+     db.session.commit() #save
+
+
+
+    diseases = Disease.query.all()
+    return render_template('diseases.html',diseases=diseases)
 
 
 if __name__ == "__main__":
-    #Creates and initalizes database. 
-    #Only creates database if database.db is missing,
-    #if not the existing database.db will be used.
-    db.create_all()
     app.run(port=8000, debug=True)
