@@ -19,33 +19,33 @@
     <p><img src="{{item.image}}" width="150" height="150" alt="imagehold"></p>
 
     <p>
-      <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsedescription{{item.disease}} aria-expanded="false" aria-controls=collapsedescription{{item.disease}}>
+      <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsedescription{{item.id}} aria-expanded="false" aria-controls=collapsedescription{{item.id}}>
         Description
       </button>
-      <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsesymptom{{item.disease}} aria-expanded="false" aria-controls=collapsesymptom{{item.disease}}>
+      <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsesymptom{{item.id}} aria-expanded="false" aria-controls=collapsesymptom{{item.id}}>
         Symptoms
       </button>
-      <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsetreatment{{item.disease}} aria-expanded="false" aria-controls=collapsetreatment{{item.disease}}>
+      <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsetreatment{{item.id}} aria-expanded="false" aria-controls=collapsetreatment{{item.id}}>
         Treatments
       </button>
     </p>
       
     
-    <div class="collapse" id=collapsedescription{{item.disease}}>
+    <div class="collapse" id=collapsedescription{{item.id}}>
       <div class="card card-body">
         <h5><u>Description</u></h5>
         {{item.description | replace("|", "<br><br>")}}
       </div>
     </div>
 
-    <div class="collapse" id=collapsesymptom{{item.disease}}>
+    <div class="collapse" id=collapsesymptom{{item.id}}>
       <div class="card card-body">
         <h5><u>Symptoms</u></h5>
         {{item.symptom | replace("|", "<br><br>")}}
       </div>
     </div>
 
-    <div class="collapse" id=collapsetreatment{{item.disease}}>
+    <div class="collapse" id=collapsetreatment{{item.id}}>
       <div class="card card-body">
         <h5><u>Treatments</u></h5>
         {{item.treatment | replace("|", "<br><br>")}}

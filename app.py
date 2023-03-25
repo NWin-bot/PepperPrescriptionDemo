@@ -102,7 +102,7 @@ def dashboard():
         userr = User.query.filter_by(email=current_user.email).first()
         now = datetime.now()
         dt_string = now.strftime("%b/%d/%Y %-I:%M %p")
-        session = Session(date=dt_string,prediction='',disease='',treatment='',image=filename,user=userr)
+        session = Session(date=dt_string,prediction='',disease='',description='',image=filename,user=userr)
         db.session.add(session)
         db.session.commit()
         return render_template('index.html',upload_hold=True,img_name=filename)

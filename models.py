@@ -17,7 +17,7 @@ class Session(db.Model):
     date = db.Column(db.Text)
     prediction = db.Column(db.String(50))
     disease = db.Column(db.String(50))
-    treatment = db.Column(db.Text)
+    description = db.Column(db.Text)
     image = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
