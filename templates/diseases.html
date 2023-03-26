@@ -6,7 +6,14 @@
 
 <div class="leftcolumn" style="width:100%">
 
-  
+  {% if show %}
+
+  <div class="alert">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+    To <span style="color:black;font-weight:bold;">return</span> to <span style="color:black;font-weight:bold;">previous</span> page click image!
+  </div>
+
+  {% endif %}
 
   {% for item in diseases %}
 
@@ -16,7 +23,7 @@
     
     <h2>{{item.disease}}</h2>
 
-    <p><img src="{{item.image}}" width="150" height="150" alt="imagehold"></p>
+    <p><img src="{{item.image}}" width="150" height="150" alt="imagehold" {% if show %} onclick="history.back()" {% endif %}></p>
 
     <p>
       <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsedescription{{item.id}} aria-expanded="false" aria-controls=collapsedescription{{item.id}}>
@@ -52,8 +59,6 @@
       </div>
     </div>
     
-    
-      
     
   </div>
 

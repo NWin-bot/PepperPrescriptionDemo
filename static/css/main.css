@@ -62,19 +62,28 @@ body {
 }
 
 
-/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other. */
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other and center the dropdown. */
 @media screen and (max-width: 800px) {
   .leftcolumn, .rightcolumn {   
     width: 100%;
     padding: 0;
   }
+  .dropdown-menu{
+    text-align: center;
+  }
 }
 
 
-/* Responsive layout - when the screen is more than 500px wide and the height is more than 800px, make the prescriptionlogo height 300px. */
+/* Responsive layout - when the screen is more than 500px wide and the height is more than 800px, the following will be done */
 @media screen and (min-height: 800px) and (min-width: 500px) {
   .prescriptionlogo {   
     height:300px;
+  }
+  #navbarNavDropdown{
+    text-align:center;
+  }
+  .dropdown-menu{
+    text-align: center;
   }
 }
 
@@ -94,7 +103,7 @@ body {
   text-align: center;
 }
 
-/* Logout and Back button locations */
+/* Logout and Back Button locations */
 
 .container {
   position: relative;
@@ -119,11 +128,11 @@ body {
   background:#ddd;
 }
 
-/* Delete button is at top left of div*/
+/* Delete Button is at top left of div*/
 
 .topleft3 {
   position: absolute;
-  top: -18px;
+  top: -30px;
   left: -6px;
 }
 
@@ -140,7 +149,7 @@ body {
 
 .topright2 {
   position: absolute;
-  top: -18px;
+  top: -30px;
   right: -6px;
 }
 
@@ -149,6 +158,8 @@ body {
 .custom {
   width: 100px !important;
 }
+
+/* History Table*/
 
 table, th, td {
   border:1px solid black;
@@ -161,3 +172,30 @@ table, th, td {
   text-align:center;
 }
 
+/* Disease Page Alert */
+
+.alert {
+  padding: 20px;
+  background-color: #ddd;
+  color: black;
+  top:10px;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: black;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
+#navbarNavDropdown{
+  text-align:center;
+}

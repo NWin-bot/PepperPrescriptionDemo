@@ -36,11 +36,8 @@
          </select>
         
 
-
       </div>
 
-
-      <br>
 
       <div class="topleft3">
 
@@ -49,7 +46,7 @@
 
           {% if show %} 
           
-        <input type="submit" value="Delete" class="btn btn-success"> 
+        <input type="submit" value="Delete" class="btn btn-success custom"> 
 
         {% endif %}
 
@@ -71,7 +68,7 @@
             <th scope="col">Image</th>
             <th scope="col">Prediction</th>
             <th scope="col">Disease</th>
-            <th scope="col">Description</th>
+            <th scope="col">Related Information</th>
           </tr>
         </thead>
         <tbody>
@@ -86,22 +83,21 @@
          <input type="checkbox" name="mycheckbox" value="{{session.id}}">
          {% endif %}
         </td>
-        <td><img src="{{url_for('static',filename='uploads/')}}{{current_user.email}}/{{session.image}}" width="60" height="60"><br> {{ session.image }}</td>
+        <td>
+
+          <div>
+            <div style="float:left">
+              <img src="{{url_for('static',filename='uploads/')}}{{current_user.email}}/{{session.image}}" width="60" height="60">
+            </div>
+            <div>
+              {{ session.image }}
+            </div>
+        </div>
+
+       </td>
         <td>{{ session.prediction }}</td>
         <td>{{ session.disease }}</td>
-        <td><a data-bs-toggle="collapse" href=#collapsedescription{{session.id}} role="button" aria-expanded="false" aria-controls=collapsedescription{{session.id}}>
-          Read More
-        </a>
-
-        <div class="collapse" id=collapsedescription{{session.id}}>
-          <div class="card card-body">
-            {{session.description | replace("|", "<br><br>")}}
-          </div>
-        </div>
-      
-      
-      
-      </td>
+        <td><a href="{{ url_for('get_diseases', disease='') }}">Read More</a></td>
       </tr>
 
       {% endautoescape %}

@@ -162,11 +162,11 @@ def go_to_profile():
 @app.route('/diseases')
 @login_required
 def go_to_diseases():
-
+    
     num=Disease.query.count()
-
+    #Only if num is equal 0 to will the csv data be read, this avoids the duplication of data in the Diseases database.
     if num==0:
-        #Reading of diseases from csv to display on diseases.html.
+    #Reading of diseases from csv to display on diseases.html.
      with open('diseases.csv', 'r', encoding="utf-8") as diseases:
        reader = csv.DictReader(diseases)
 
@@ -183,10 +183,19 @@ def go_to_diseases():
             
      db.session.commit() #save
 
-
-
     diseases = Disease.query.all()
     return render_template('diseases.html',diseases=diseases)
+
+#Route displays more disease information.
+#Clicking of read more button in history.html initiates use of route.
+@app.route('/disease', methods=['POST','GET'])
+@login_required
+def get_diseases():
+    disease = request.args.get('disease',default=None, type=str)
+    diseases = Disease.query.filter(Disease.disease.like("%{}%".format(disease))).all()
+    return render_template('diseases.html',diseases=diseases,show=True)
+
+
 
 
 if __name__ == "__main__":
