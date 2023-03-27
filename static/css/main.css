@@ -62,28 +62,19 @@ body {
 }
 
 
-/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other and center the dropdown. */
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other. */
 @media screen and (max-width: 800px) {
   .leftcolumn, .rightcolumn {   
     width: 100%;
     padding: 0;
   }
-  .dropdown-menu{
-    text-align: center;
-  }
 }
 
 
-/* Responsive layout - when the screen is more than 500px wide and the height is more than 800px, the following will be done */
+/* Responsive layout - when the screen is more than 500px wide and the height is more than 800px, make logo the following dimensions. */
 @media screen and (min-height: 800px) and (min-width: 500px) {
   .prescriptionlogo {   
     height:300px;
-  }
-  #navbarNavDropdown{
-    text-align:center;
-  }
-  .dropdown-menu{
-    text-align: center;
   }
 }
 
@@ -196,6 +187,11 @@ table, th, td {
   color: black;
 }
 
+/* Navbar */
+
+.dropdown-menu{
+  text-align: center;
+}
 #navbarNavDropdown{
   text-align:center;
 }
