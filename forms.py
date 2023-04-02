@@ -14,6 +14,9 @@ class SignUpForm(FlaskForm):
 
     password = PasswordField(validators=[
                            InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
+    
+    hint = StringField(validators=[
+                           InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password Hint"})
 
     submit = SubmitField('Sign Up')
     
@@ -34,3 +37,20 @@ class LoginForm(FlaskForm):
                              InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
 
     submit = SubmitField('Login')
+
+#ProfileUpdate Form and fields.
+class ProfileUpdateForm(FlaskForm):
+    
+    username = StringField(validators=[
+                           InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
+
+    submit = SubmitField('Update')
+
+#ProfilePassUpdate Form and fields.
+class ProfilePassUpdateForm(FlaskForm):
+    
+    password = PasswordField(validators=[
+                             InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
+
+    submit = SubmitField('Update')
+

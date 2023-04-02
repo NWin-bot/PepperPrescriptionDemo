@@ -111,7 +111,7 @@ body {
 
 /* Username of current user is at top left of screen*/
 
-.topleft2 {
+.topleftusername {
   position: absolute;
   top: -20px;
   left: -25px;
@@ -121,7 +121,7 @@ body {
 
 /* Delete Button is at top left of div*/
 
-.topleft3 {
+.topleftdelete {
   position: absolute;
   top: -30px;
   left: -6px;
@@ -138,7 +138,15 @@ body {
 
 /* Select per_page amount is at top right of div*/
 
-.topright2 {
+.toprightselect {
+  position: absolute;
+  top: -30px;
+  right: -6px;
+}
+
+/* Search bar is at top right of div*/
+
+.toprightsearch {
   position: absolute;
   top: -30px;
   right: -6px;

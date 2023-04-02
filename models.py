@@ -9,6 +9,10 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(20), nullable=False, unique=True)
     username = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(20), nullable=False)
+    hint = db.Column(db.String(20), nullable=False)
+    image = db.Column(db.Text)
+    since = db.Column(db.Text)
+    last = db.Column(db.Text)
     sessions = db.relationship('Session', backref='user')
 
 #Session model and data types

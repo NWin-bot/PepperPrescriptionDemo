@@ -17,8 +17,8 @@
 
       <div class="container">
 
-      <div class="topleft2">
-        <b>Logged in: {{current_user.username}}</b>
+      <div class="topleftusername">
+        <b>Logged in: <a href="{{ url_for('go_to_profile') }}" style="color:black">{{current_user.username}}</a></b>
         </div>
       
       <div class="topright">
@@ -52,7 +52,7 @@
               </a>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                 <li><a class="dropdown-item" href="{{ url_for('go_to_profile') }}">View Profile</a></li>
-                <li><a class="dropdown-item" href="{{ url_for('go_to_history') }}">View History</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('go_to_history', show=True) }}">View History</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="{{ url_for('go_to_aboutus') }}">About Us</a></li>
               </ul>
@@ -71,7 +71,7 @@
             <h3><u>Welcome to Pepper Prescription</u></h3>
             <h6>Disclaimer: For optimum results <span style="color:red;font-weight:bold;">Select</span> or <span style="color:red;font-weight:bold;">Capture</span> a <span style="color:black;font-weight:bold;">single leaf</span> on a <span style="color:black;font-weight:bold;">white background</span>.</h6>
             
-            <form action="#" method="POST" enctype="multipart/form-data">
+            <form action="{{ url_for('dashboard') }}" method="POST" enctype="multipart/form-data">
                 <input type="file" name="image" required="true" accept="image/jpeg" id="file-input">
                 <br>
                 <br>
