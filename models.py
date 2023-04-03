@@ -6,13 +6,14 @@ db = SQLAlchemy()
 #User model and data types.
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(20), nullable=False, unique=True)
+    email = db.Column(db.String(50), nullable=False, unique=True)
     username = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(20), nullable=False)
     hint = db.Column(db.String(20), nullable=False)
     image = db.Column(db.Text)
     since = db.Column(db.Text)
     last = db.Column(db.Text)
+    email_confirmed = db.Column(db.Boolean, default=False, nullable=False)
     sessions = db.relationship('Session', backref='user')
 
 #Session model and data types

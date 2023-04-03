@@ -1,10 +1,13 @@
-from flask import Flask, flash, render_template, url_for, redirect, request, session
+from flask import Flask, flash, render_template, url_for, redirect, request, session, abort
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
 from datetime import datetime, timedelta
 from models import db, User, Session, Disease
-from forms import SignUpForm, LoginForm, ProfileUpdateForm, ProfilePassUpdateForm
+from forms import SignUpForm, LoginForm, ProfileUserUpdateForm, ProfilePassUpdateForm, EmailForm, PasswordForm
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import os, csv
+
 
 
 app = Flask(__name__)
@@ -14,6 +17,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
 app.permanent_session_lifetime = timedelta(minutes=60)
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
+app.config.from_pyfile('config.cfg')
+mail = Mail(app)
+s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 db.app = app
 db.init_app(app)
 
@@ -59,6 +65,46 @@ def login():
             return render_template('login.html', form=form)
     return render_template('login.html', form=form)
 
+#Displays reset password page and accepts email to send reset link to.
+@app.route('/reset', methods=["GET", "POST"])
+def reset():
+    form = EmailForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first
+        
+        #Sending of email confirmation link for password reset
+        token = s.dumps(form.email.data, salt='recover-key')
+        msg = Message('Pepper Prescription - Password Reset', sender='nickwinter01@gmail.com', recipients=[form.email.data])
+        link = url_for('reset_with_token', token=token, _external=True)
+        msg.body = 'Hi, welcome to Pepper Prescription, please confirm your email to reset your password {}'.format(link)
+        mail.send(msg)
+        flash('Check email for password reset link!')
+        
+    return render_template('reset.html', form=form)
+
+#Clicking of link in email, verifies email and changes state of email confirmation if not already verified.
+#New password is accepted and confirmed before being updated.
+@app.route('/reset/<token>', methods=["GET", "POST"])
+def reset_with_token(token):
+    try:
+        email = s.loads(token, salt='recover-key', max_age=1200)
+    except SignatureExpired:
+        return '<h1>The token is expired!</h1>'
+
+    form = PasswordForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=email).first_or_404()
+        hashed_password = bcrypt.generate_password_hash(form.password.data)
+        user.password = hashed_password
+        user.email_confirmed = True
+
+        db.session.add(user)
+        db.session.commit()
+        flash('Password, Updated!')
+        return redirect(url_for('login'))
+
+    return render_template('reset_with_token.html', form=form, token=token)
 
 #Logs out user.
 @app.route('/logout')
@@ -82,8 +128,32 @@ def signup():
         new_user = User(email=form.email.data,username=form.username.data,password=hashed_password,hint=form.hint.data,since=dt_string)
         db.session.add(new_user)
         db.session.commit()
+
+        #Sending of email confirmation link
+        token = s.dumps(form.email.data, salt='email-confirm')
+        msg = Message('Pepper Prescription - Email Verification', sender='nickwinter01@gmail.com', recipients=[form.email.data])
+        link = url_for('confirm_email', token=token, _external=True)
+        msg.body = 'Hi, welcome to Pepper Prescription, please confirm your email {}'.format(link)
+        mail.send(msg)
+        flash('Check email for confirmation link!')
         return redirect(url_for('login'))
+   
     return render_template('signup.html', form=form)
+
+#Clicking of link in email, verifies email and changes state of email confirmation.
+#Full site access is granted to user after email confirmation.
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=604800)
+    except SignatureExpired:
+        return '<h1>The token is expired!</h1>'
+    user = User.query.filter_by(email=email).first_or_404()
+    user.email_confirmed = True
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for('dashboard'))
+
 
 #Displays dashboard to logged in user, user uploads image on this page and gets results.
 #Clicking of submit button in dashboard.html initiates use of route.
@@ -211,12 +281,11 @@ def go_to_profile():
 @app.route('/username', methods=['POST','GET'])
 @login_required
 def go_to_profile_username():
-    form = ProfileUpdateForm()
+    form = ProfileUserUpdateForm()
     show2 = request.args.get('show2', False, type=str)
     if form.validate_on_submit():
-        if form.username.data != '':
-         current_user.username = form.username.data
-         db.session.commit()
+        current_user.username = form.username.data
+        db.session.commit()
         flash('Username, Updated!')
     return render_template('profile.html',form=form,show2=show2)
 
@@ -227,12 +296,20 @@ def go_to_profile_password():
     form = ProfilePassUpdateForm()
     show3 = request.args.get('show3', False, type=str)
     if form.validate_on_submit():
-        if form.password.data != '':
-         hashed_password = bcrypt.generate_password_hash(form.password.data)
-         current_user.password = hashed_password
-         db.session.commit()
+        hashed_password = bcrypt.generate_password_hash(form.password.data)
+        current_user.password = hashed_password
+        db.session.commit()
         flash('Password, Updated!')
     return render_template('profile.html',form=form,show3=show3)
+
+#Clicking of Delete link in profile.html allows user to delete account.
+@app.route('/deleteaccount')
+@login_required
+def go_to_profile_deleteaccount():
+    user = User.query.filter_by(email=current_user.email).first()
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('signup'))
 
 #Displays diseases route to logged in user.
 @app.route('/diseases')

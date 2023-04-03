@@ -35,11 +35,13 @@
 
       <form method="POST" action="">
           {{ form.hidden_tag() }}
-          {{ form.email }}
+          <input type="email" id="email" name="email" placeholder="Email" required>
           <br>
           {{ form.username }}
           <br>
-          <input type="text" name="password" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Password, must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" autocomplete="off">
+          <input type="password" id="password" name="password" placeholder="Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Password, must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" autocomplete="off">
+          <br>
+          <input type="password" id="confirm" name="confirm" placeholder="Confirm Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Password, must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" autocomplete="off" onkeyup='check();'>
           <br>
           {{ form.hint(autocomplete="off") }}
           <br>
@@ -47,7 +49,9 @@
           {{ form.submit(class="btn btn-success custom") }}
       </form>
 
-      <p>
+      <br>
+
+      <p id="message">
         {% if form.email.errors %}
         <br>
             {% for error in form.email.errors %}
@@ -86,6 +90,22 @@
     </div>
     <!-- Copyright -->
     </div>
+
+    <script>
+      // Matching of password and confirm password
+      var check = function() {
+        if (document.getElementById('password').value ==
+          document.getElementById('confirm').value) {
+          document.getElementById('confirm').style.color = 'green';
+          document.getElementById('message').style.color = 'green';
+          document.getElementById('message').innerHTML = 'matching';
+        } else {
+          document.getElementById('confirm').style.color = 'red';
+          document.getElementById('message').style.color = 'red';
+          document.getElementById('message').innerHTML = 'Passwords must match';
+        }
+      }
+    </script>
   
 
 </body>

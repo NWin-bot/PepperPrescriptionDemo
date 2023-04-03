@@ -18,7 +18,11 @@
       <div class="container">
 
       <div class="topleftusername">
+        {% if not current_user.email_confirmed %}
+        <b style="color:red">Confirm Email</b>
+        {%else%}
         <b>Logged in: <a href="{{ url_for('go_to_profile') }}" style="color:black">{{current_user.username}}</a></b>
+        {% endif %}
         </div>
       
       <div class="topright">
@@ -42,7 +46,9 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav">
             <li class="nav-item">
+              {% if current_user.email_confirmed %}
             <a class="nav-link" href="{{ url_for('go_to_diseases') }}">Diseases</a>
+            {% endif %}
             </li>
           </ul>
           <ul class="navbar-nav ms-auto">
@@ -52,7 +58,9 @@
               </a>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                 <li><a class="dropdown-item" href="{{ url_for('go_to_profile') }}">View Profile</a></li>
+                {% if current_user.email_confirmed %}
                 <li><a class="dropdown-item" href="{{ url_for('go_to_history', show=True) }}">View History</a></li>
+                {% endif %}
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="{{ url_for('go_to_aboutus') }}">About Us</a></li>
               </ul>
@@ -124,6 +132,22 @@
     </div>
     <!-- Copyright -->
       </div>
+
+      <script>
+        // Matching of password and confirm password
+        var check = function() {
+          if (document.getElementById('password').value ==
+            document.getElementById('confirm').value) {
+            document.getElementById('confirm').style.color = 'green';
+            document.getElementById('message').style.color = 'green';
+            document.getElementById('message').innerHTML = 'matching';
+          } else {
+            document.getElementById('confirm').style.color = 'red';
+            document.getElementById('message').style.color = 'red';
+            document.getElementById('message').innerHTML = 'Passwords must match';
+          }
+        }
+      </script>
 
 </body>
 </html>
