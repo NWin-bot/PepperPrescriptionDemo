@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, url_for, redirect, request, session, abort
+from flask import Flask, flash, render_template, url_for, redirect, request, session
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
 from datetime import datetime, timedelta
@@ -160,8 +160,6 @@ def confirm_email(token):
 @app.route('/dashboard', methods=['POST','GET'])
 @login_required
 def dashboard():
-    user = User.query.filter_by(email=current_user.email).first()
-    sessionz = Session.query.filter_by(user=user).count()
     if request.method=='POST':
         file_hold=request.files['image']
         filename=file_hold.filename
@@ -182,8 +180,8 @@ def dashboard():
         session = Session(date=dt_string,prediction='',disease='',description='',image=filename,user=userr)
         db.session.add(session)
         db.session.commit()
-        return render_template('index.html',num2=sessionz,upload_hold=True,img_name=filename)
-    return render_template('index.html',num2=sessionz,upload_hold=False,img_name="")
+        return render_template('index.html',upload_hold=True,img_name=filename)
+    return render_template('index.html',upload_hold=False,img_name="")
 
 
 #Displays aboutus route to logged in user.
