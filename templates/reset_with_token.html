@@ -31,7 +31,7 @@
 
         <div class="login_links">
             <div class="card_log_reg" style="float:none">
-                <h1>Step 2</h1>
+                <h1>Reset - Step 2</h1>
 
             <form method="POST" action="{{ url_for('reset_with_token', token=token) }}">
                 {{ form.hidden_tag() }}
@@ -95,7 +95,7 @@
             document.getElementById('confirm').value) {
             document.getElementById('confirm').style.color = 'green';
             document.getElementById('message').style.color = 'green';
-            document.getElementById('message').innerHTML = 'matching';
+            document.getElementById('message').innerHTML = 'Passwords match';
           } else {
             document.getElementById('confirm').style.color = 'red';
             document.getElementById('message').style.color = 'red';

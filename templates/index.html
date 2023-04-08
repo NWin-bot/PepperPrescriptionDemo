@@ -89,15 +89,70 @@
 
           {% if upload_hold %}  
           <div class="card">
-            <img class="img-pos" src="{{url_for('static',filename='uploads/')}}{{current_user.email}}/{{img_name}}" alt="pepperprescription" width="150" height="150">
-            <p>Plant Name: Lorem ipsum</p>
+            <img src="{{url_for('static',filename='uploads/')}}{{current_user.email}}/{{img_name}}" alt="pepperprescription" width="340" height="300">
+            <p>Classification: {{classification}}</p>
 
-            <p>Disease Type: Pellentesque enim magna, laoreet accumsan metus ac, tempor lacinia nunc. Nullam vehicula ipsum tellus, ut aliquam sapien sagittis aliquet. 
-              In ac est nisl. Aliquam erat volutpat. Nulla condimentum ante at eros condimentum rhoncus. Nulla dapibus in nibh et elementum. Morbi feugiat pulvinar augue ut placerat. 
-              Quisque consequat sed lectus eu euismod.</p>
-
+            <p>Severity: {{severity_percentage}}%</p>
             
           </div>
+           
+          <div class="card">
+            
+            <h1 style="font-weight:bold">Related Information</h1>
+
+            {% for item in diseases %}
+
+            {% autoescape false %}
+
+            <div class="card" style="background:#ddd">
+              
+              <h2>{{item.disease}}</h2>
+
+              <p><img src="{{item.image}}" width="150" height="150" alt="imagehold" {% if show %} onclick="history.back()" {% endif %}></p>
+
+              <p>
+                <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsedescription{{item.id}} aria-expanded="false" aria-controls=collapsedescription{{item.id}}>
+                  Description
+                </button>
+                <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsesymptom{{item.id}} aria-expanded="false" aria-controls=collapsesymptom{{item.id}}>
+                  Symptoms
+                </button>
+                <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsetreatment{{item.id}} aria-expanded="false" aria-controls=collapsetreatment{{item.id}}>
+                  Treatments
+                </button>
+              </p>
+                
+              
+              <div class="collapse" id=collapsedescription{{item.id}}>
+                <div class="card card-body">
+                  <h5><u>Description</u></h5>
+                  {{item.description | replace("|", "<br><br>")}}
+                </div>
+              </div>
+
+              <div class="collapse" id=collapsesymptom{{item.id}}>
+                <div class="card card-body">
+                  <h5><u>Symptoms</u></h5>
+                  {{item.symptom | replace("|", "<br><br>")}}
+                </div>
+              </div>
+
+              <div class="collapse" id=collapsetreatment{{item.id}}>
+                <div class="card card-body">
+                  <h5><u>Treatments</u></h5>
+                  {{item.treatment | replace("|", "<br><br>")}}
+                </div>
+              </div>
+              
+              
+            </div>
+
+            {% endautoescape %}
+
+            {% endfor %}
+
+          </div>
+
           {% endif %}
           
         </div>
@@ -105,7 +160,7 @@
         <div class="rightcolumn">
       
          
-          <div class="card">
+          <div style="text-align:center" class="card">
             <h3>Follow Us</h3>
             <span class="socialmediaview">
             <a href="#">
@@ -140,7 +195,7 @@
             document.getElementById('confirm').value) {
             document.getElementById('confirm').style.color = 'green';
             document.getElementById('message').style.color = 'green';
-            document.getElementById('message').innerHTML = 'matching';
+            document.getElementById('message').innerHTML = 'Passwords match';
           } else {
             document.getElementById('confirm').style.color = 'red';
             document.getElementById('message').style.color = 'red';

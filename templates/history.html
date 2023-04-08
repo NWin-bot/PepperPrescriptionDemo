@@ -11,7 +11,7 @@
 
   <div class="alert">
     <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-    Select <span style="color:black;font-weight:bold;">show all</span> to <span style="color:black;font-weight:bold;">search</span> and 
+    Select <span style="color:black;font-weight:bold;">show all</span> to <span style="color:black;font-weight:bold;">search</span> and individually
     <span style="color:black;font-weight:bold;">delete!</span>
   </div>
 
@@ -23,7 +23,7 @@
      
     <form action="{{ url_for('history_search') }}" method="GET" autocomplete="off">
     <div class="input-group">
-      <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="q" value="">
+      <input type="search" class="form-control rounded" placeholder="Search by Image or Disease Name" aria-label="Search" aria-describedby="search-addon" name="q" value="">
       <button type="submit" class="btn btn-outline-success">search</button>
     </div>
   </form>
@@ -66,6 +66,11 @@
 
       <div class="topleftdelete">
 
+        {% if not show %}
+
+        <a class="btn btn-success" href="{{ url_for('delete_from_history_all') }}" role="button" onclick="return confirm('Are you sure you want clear your history?');">Clear History</a>
+
+        {% endif %}
        
         <form method="POST" action="{{ url_for('delete_from_history') }}">
 
@@ -91,8 +96,8 @@
           <tr>
             <th scope="col">Date/Time</th>
             <th scope="col">Image</th>
-            <th scope="col">Prediction</th>
             <th scope="col">Disease</th>
+            <th scope="col">Severity</th>
             <th scope="col">Related Information</th>
           </tr>
         </thead>
@@ -110,19 +115,14 @@
         </td>
         <td>
 
-          <div>
-            <div style="float:left">
-              <img src="{{url_for('static',filename='uploads/')}}{{current_user.email}}/{{session.image}}" width="60" height="60">
-            </div>
-            <div>
-              {{ session.image }}
-            </div>
-        </div>
+            <img id="uploadimg" src="{{url_for('static',filename='uploads/')}}{{current_user.email}}/{{session.image}}" width="60" height="60">
+            
+            {{ session.image }}
 
        </td>
-        <td>{{ session.prediction }}</td>
         <td>{{ session.disease }}</td>
-        <td><a href="{{ url_for('go_to_diseases', disease='') }}">Read More</a></td>
+        <td>{{ session.severity }}%</td>
+        <td><a href="{{ url_for('go_to_diseases', disease=session.disease) }}">Read More</a></td>
       </tr>
 
       {% endautoescape %}

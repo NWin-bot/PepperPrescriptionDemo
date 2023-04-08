@@ -6,7 +6,11 @@ from models import db, User, Session, Disease
 from forms import SignUpForm, LoginForm, ProfileUserUpdateForm, ProfilePassUpdateForm, EmailForm, PasswordForm
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from threading import Thread
+from AI_model import predict_disease
+import matplotlib.pyplot as plt
 import os, csv
+
 
 
 
@@ -41,6 +45,10 @@ def load_user(user_id):
 #Displayed if user attempts to modify URL to access page without being logged in.
 login_manager.login_message = u"You must login to access this page!"
 
+#Sending of emails in the background.
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
 
 #Home route, displays Buttons routed to Login & Sign Up.
 @app.route('/')
@@ -70,14 +78,15 @@ def login():
 def reset():
     form = EmailForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first
+        user = User.query.filter_by(email=form.email.data).first_or_404(description='Account, does not exist!')
         
         #Sending of email confirmation link for password reset
         token = s.dumps(form.email.data, salt='recover-key')
         msg = Message('Pepper Prescription - Password Reset', sender='nickwinter01@gmail.com', recipients=[form.email.data])
         link = url_for('reset_with_token', token=token, _external=True)
-        msg.body = 'Hi, welcome to Pepper Prescription, please confirm your email to reset your password {}'.format(link)
-        mail.send(msg)
+        msg.body = 'Hi ' + user.username + ', please confirm your email to reset your password {}'.format(link)
+        thr = Thread(target=send_async_email, args=[app, msg])
+        thr.start()
         flash('Check email for password reset link!')
         
     return render_template('reset.html', form=form)
@@ -89,7 +98,8 @@ def reset_with_token(token):
     try:
         email = s.loads(token, salt='recover-key', max_age=1200)
     except SignatureExpired:
-        return '<h1>The token is expired!</h1>'
+        flash('Token Expired, submit email for new reset link!')
+        return redirect(url_for('reset'))
 
     form = PasswordForm()
 
@@ -111,7 +121,7 @@ def reset_with_token(token):
 @login_required
 def logout():
     now = datetime.now()
-    dt_string = now.strftime("%b/%d/%Y %-I:%M %p")
+    dt_string = now.strftime("%d/%b/%Y %-I:%M %p")
     current_user.last = dt_string
     db.session.commit()
     logout_user()
@@ -124,7 +134,7 @@ def signup():
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
         now = datetime.now()
-        dt_string = now.strftime("%b/%d/%Y %-I:%M %p")
+        dt_string = now.strftime("%d/%b/%Y %-I:%M %p")
         new_user = User(email=form.email.data,username=form.username.data,password=hashed_password,hint=form.hint.data,since=dt_string)
         db.session.add(new_user)
         db.session.commit()
@@ -133,9 +143,10 @@ def signup():
         token = s.dumps(form.email.data, salt='email-confirm')
         msg = Message('Pepper Prescription - Email Verification', sender='nickwinter01@gmail.com', recipients=[form.email.data])
         link = url_for('confirm_email', token=token, _external=True)
-        msg.body = 'Hi, welcome to Pepper Prescription, please confirm your email {}'.format(link)
-        mail.send(msg)
-        flash('Check email for confirmation link!')
+        msg.body = 'Hi ' + form.username.data + ', Welcome to Pepper Prescription, please confirm your email {}'.format(link)
+        thr = Thread(target=send_async_email, args=[app, msg])
+        thr.start()
+        flash('Check email for verification link!')
         return redirect(url_for('login'))
    
     return render_template('signup.html', form=form)
@@ -147,7 +158,8 @@ def confirm_email(token):
     try:
         email = s.loads(token, salt='email-confirm', max_age=604800)
     except SignatureExpired:
-        return '<h1>The token is expired!</h1>'
+        flash('Token Expired, submit email for new verification link!')
+        return redirect(url_for('reset'))
     user = User.query.filter_by(email=email).first_or_404()
     user.email_confirmed = True
     db.session.add(user)
@@ -174,13 +186,19 @@ def dashboard():
         Path=os.path.join(app.config['UPLOAD_FOLDER'], filename2)
         file_hold.save(Path)
         #--------------------------------------------------------
+        img = plt.imread(Path)
+        severity_percentage,classification = predict_disease(img)
+        
         userr = User.query.filter_by(email=current_user.email).first()
         now = datetime.now()
-        dt_string = now.strftime("%b/%d/%Y %-I:%M %p")
-        session = Session(date=dt_string,prediction='',disease='',description='',image=filename,user=userr)
+        dt_string = now.strftime("%d/%b/%Y %-I:%M %p")
+        session = Session(date=dt_string,disease=classification,severity=severity_percentage,image=filename,user=userr)
         db.session.add(session)
         db.session.commit()
-        return render_template('index.html',upload_hold=True,img_name=filename)
+        
+        #Querying of Disease database to return, related disease information for dashboard page.
+        diseases = Disease.query.filter(Disease.disease.like('%' + classification + '%') | Disease.description.like('%' + classification + '%')).all()
+        return render_template('index.html',upload_hold=True,img_name=filename,classification=classification,severity_percentage=severity_percentage,diseases=diseases)
     return render_template('index.html',upload_hold=False,img_name="")
 
 
@@ -226,6 +244,22 @@ def delete_from_history():
       db.session.commit()
      flash('')
     user = User.query.filter_by(email=current_user.email).first()
+    sessionz = Session.query.filter_by(user=user).count()
+    return redirect(url_for('go_to_history', per_page=sessionz, show=True ))
+
+#Route deletes logged in users full history.
+#Clicking of clear history button in history.html initiates use of route.
+@app.route('/deleteall', methods=['POST','GET'])
+@login_required
+def delete_from_history_all():
+    
+    user = User.query.filter_by(email=current_user.email).first()
+    sessions = Session.query.filter_by(user=user)
+
+    for session in sessions:
+     db.session.delete(session)
+    db.session.commit()
+     
     sessionz = Session.query.filter_by(user=user).count()
     return redirect(url_for('go_to_history', per_page=sessionz, show=True ))
 
@@ -341,7 +375,7 @@ def go_to_diseases():
        diseases = Disease.query.all()
        show=False
     else:
-       diseases = Disease.query.filter(Disease.disease.like('%' + disease + '%')).all()
+       diseases = Disease.query.filter(Disease.disease.like('%' + disease + '%') | Disease.description.like('%' + disease + '%')).all()
        show=True
 
     return render_template('diseases.html',diseases=diseases,show=show)

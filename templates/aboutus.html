@@ -6,16 +6,53 @@
 {% block content %}
 
 <div class="leftcolumn">
+    
     <div class="card">
+
+      <h1 style="font-weight:bold">Abstract</h1>
+
+      <p>
+
+        Pepper Prescription is a disease recognition web service that gives a real-time diagnosis of illness and severity based on an image input of a leaf of a sweet pepper plant. 
+        The image is first resized, converted to grayscale and normalized. OTSU and HSB masking is then applied so that the diseased area can be characterized and classified against 
+        the train and test AI and severity can be calculated from varying pixel counts in segmentations. Once the disease and severity are established, the flask framework would be 
+        able to relay the results and pull the recommended treatment fulfilling the webservice. This service aims to reduce, and eliminate, disease spread amongst sweet pepper crops 
+        through education. In turn, the overall shortage and quality of local produce will be positively impacted resulting in heightened GDP.
+
+      </p>
+      
+    </div>
+
+    <div class="card">
+
+      <h1 style="font-weight:bold">Members</h1>
+
+      <ul>
+        <li>Angel Thomas - 816025106 - angel.thomas@my.uwi.edu</li>
+        <li>Simeon Williams - 814005110 - simeon.williams@my.uwi.edu</li>
+        <li>Nickal Winter - 816015181 - nickal.winter@my.uwi.edu</li>
+      </ul>
      
     </div>
+
     
   </div>
  
-  <div class="rightcolumn">  
-    <div class="card">
-      
-      
+  <div class="rightcolumn"> 
+
+    <div style="text-align:center" class="card">
+      <h3>Follow Us</h3>
+      <span class="socialmediaview">
+      <a href="#">
+        <img src="{{url_for('static',filename='image/facebook.png')}}" alt="" width="50" height="50">
+      </a>
+      <a href="#">
+        <img src="{{url_for('static',filename='image/twitter.png')}}" alt="" width="50" height="50">
+      </a>
+      <a href="#">
+        <img src="{{url_for('static',filename='image/instagram.png')}}" alt="" width="50" height="50">
+      </a>
+    </span>
     </div>
    
     

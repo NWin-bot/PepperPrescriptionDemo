@@ -20,9 +20,8 @@ class User(db.Model, UserMixin):
 class Session(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Text)
-    prediction = db.Column(db.String(50))
     disease = db.Column(db.String(50))
-    description = db.Column(db.Text)
+    severity = db.Column(db.Integer)
     image = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
