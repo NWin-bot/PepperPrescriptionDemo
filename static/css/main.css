@@ -229,12 +229,10 @@ table, th, td {
 
 .typewriter2 p {
   overflow: hidden;
-  /* Ensures the content is not revealed until the animation */
   border-right: .15em solid transparent;
   white-space: nowrap;
   margin: 0 auto;
   letter-spacing: 0;
-
   padding-left: 10px;
   opacity: 0;
   animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite, slidein 1s ease 3.5s forwards;
