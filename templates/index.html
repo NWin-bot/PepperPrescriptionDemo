@@ -90,9 +90,13 @@
           {% if upload_hold %}  
           <div class="card">
             <img src="{{url_for('static',filename='uploads/')}}{{current_user.email}}/{{img_name}}" alt="pepperprescription" width="340" height="300">
-            <p>Classification: {{classification}}</p>
 
-            <p>Severity: {{severity_percentage}}%</p>
+            <div class="typewriter1">
+              <p>Classification: {{classification}}</p>
+            </div>
+            <div class="typewriter2">
+              <p>Severity: {{severity_percentage}}%</p>
+            </div>
             
           </div>
            
