@@ -146,7 +146,6 @@ notebook_shim==0.2.2
 numba==0.56.4
 numexpr==2.8.4
 numpydoc==1.5.0
-opencv-python==4.7.0
 openpyxl==3.0.10
 packaging==22.0
 pandas==1.5.3
