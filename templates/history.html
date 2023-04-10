@@ -1,0 +1,155 @@
+{% extends "index.html" %}
+
+{% block title %} History {% endblock %}
+
+
+{% block content %}
+
+<div class="leftcolumn" style="width:100%">
+
+  {% if not show %}
+
+  <div class="alert">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+    Select <span style="color:black;font-weight:bold;">show all</span> to <span style="color:black;font-weight:bold;">search</span> and individually
+    <span style="color:black;font-weight:bold;">delete!</span>
+  </div>
+
+  {% endif %}
+
+  {% if show %}
+
+  <div class="alert">
+     
+    <form action="{{ url_for('history_search') }}" method="GET" autocomplete="off">
+    <div class="input-group">
+      <input type="search" class="form-control rounded" placeholder="Search by Image or Disease Name" aria-label="Search" aria-describedby="search-addon" name="q" value="">
+      <button type="submit" class="btn btn-outline-success">search</button>
+    </div>
+  </form>
+        
+  </div>
+
+  {% endif %}
+
+  <div class="card" style="background:#ddd">
+
+    <br>
+
+    <div class="container">
+
+      <br>
+
+      <div class="toprightselect">
+      
+        <select onchange="location = this.value;">
+          <option value="">{% if not show %} Show,
+            {{num}}
+             items per page
+             
+            {%else%}
+             
+            Show All
+
+             
+             {% endif %}</option>
+          <option value="{{ url_for('go_to_history', per_page=5) }}">5</option>
+          <option value="{{ url_for('go_to_history', per_page=10) }}">10</option>
+          <option value="{{ url_for('go_to_history', per_page=25) }}">25</option>
+          <option value="{{ url_for('go_to_history', per_page=50) }}">50</option>
+          <option value="{{ url_for('go_to_history', show=True) }}">Show All</option>
+         </select>
+        
+
+      </div>
+
+
+      <div class="topleftdelete">
+
+        {% if not show %}
+
+        <a class="btn btn-success" href="{{ url_for('delete_from_history_all') }}" role="button" onclick="return confirm('Are you sure you want clear your history?');">Clear History</a>
+
+        {% endif %}
+       
+        <form method="POST" action="{{ url_for('delete_from_history') }}">
+
+          {% if show %} 
+          
+        <input type="submit" value="Delete" class="btn btn-success custom"> 
+
+        {% endif %}
+
+      </div>
+         
+
+    </div>
+     
+    
+
+    <div style="overflow-x: auto;">
+
+       
+    
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Date/Time</th>
+            <th scope="col">Image</th>
+            <th scope="col">Disease</th>
+            <th scope="col">Severity</th>
+            <th scope="col">Related Information</th>
+          </tr>
+        </thead>
+        <tbody>
+      {% for session in sessions.items %}
+
+      {% autoescape false %}
+
+      <tr>
+        <td>{{ session.date }}
+          {% if show %} 
+         <br>
+         <input type="checkbox" name="mycheckbox" value="{{session.id}}">
+         {% endif %}
+        </td>
+        <td>
+
+            <img id="uploadimg" src="{{url_for('static',filename='uploads/')}}{{current_user.email}}/{{session.image}}" width="60" height="60">
+            
+            {{ session.image }}
+
+       </td>
+        <td>{{ session.disease }}</td>
+        <td>{{ session.severity }}%</td>
+        <td><a href="{{ url_for('go_to_diseases', disease=session.disease) }}">Read More</a></td>
+      </tr>
+
+      {% endautoescape %}
+
+      {% endfor %}
+        </tbody>
+      </table>
+      
+    </form>
+
+      {% for page_num in sessions.iter_pages(left_edge=1, right_edge=1,
+        left_current=1, right_current=2) %} {% if page_num %} {% if sessions.page == page_num %}
+        <a class="btn btn-success" href="{{ url_for('go_to_history', page=page_num, per_page=num) }}">{{ page_num }}</a>
+        {% else %}
+        <a class="btn btn-outline-success" href="{{ url_for('go_to_history', page=page_num, per_page=num) }}">{{ page_num }}</a>
+        {% endif %} {% else %} ... {% endif %} {% endfor %}
+        <br>
+        <br>
+        <p>
+          Showing page {{ sessions.page }} of {{ sessions.pages }}
+       </p>
+
+    </div>
+    
+  </div>
+    
+  </div>
+ 
+   
+{% endblock %}

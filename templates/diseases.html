@@ -1,0 +1,71 @@
+{% extends "index.html" %}
+
+{% block title %} Diseases {% endblock %}
+
+{% block content %}
+
+<div class="leftcolumn" style="width:100%">
+
+  {% if show %}
+
+  <div class="alert">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+    To <span style="color:black;font-weight:bold;">return</span> to <span style="color:black;font-weight:bold;">previous page</span> click image!
+  </div>
+
+  {% endif %}
+
+  {% for item in diseases %}
+
+  {% autoescape false %}
+
+  <div class="card" style="background:#ddd">
+    
+    <h2>{{item.disease}}</h2>
+
+    <p><img src="{{item.image}}" width="150" height="150" alt="imagehold" {% if show %} onclick="history.back()" {% endif %}></p>
+
+    <p>
+      <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsedescription{{item.id}} aria-expanded="false" aria-controls=collapsedescription{{item.id}}>
+        Description
+      </button>
+      <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsesymptom{{item.id}} aria-expanded="false" aria-controls=collapsesymptom{{item.id}}>
+        Symptoms
+      </button>
+      <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target=#collapsetreatment{{item.id}} aria-expanded="false" aria-controls=collapsetreatment{{item.id}}>
+        Treatments
+      </button>
+    </p>
+      
+    
+    <div class="collapse" id=collapsedescription{{item.id}}>
+      <div class="card card-body">
+        <h5><u>Description</u></h5>
+        {{item.description | replace("|", "<br><br>")}}
+      </div>
+    </div>
+
+    <div class="collapse" id=collapsesymptom{{item.id}}>
+      <div class="card card-body">
+        <h5><u>Symptoms</u></h5>
+        {{item.symptom | replace("|", "<br><br>")}}
+      </div>
+    </div>
+
+    <div class="collapse" id=collapsetreatment{{item.id}}>
+      <div class="card card-body">
+        <h5><u>Treatments</u></h5>
+        {{item.treatment | replace("|", "<br><br>")}}
+      </div>
+    </div>
+    
+    
+  </div>
+
+  {% endautoescape %}
+
+  {% endfor %}
+    
+  </div>
+
+{% endblock %}

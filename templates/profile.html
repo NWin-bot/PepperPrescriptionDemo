@@ -1,0 +1,93 @@
+{% extends "index.html" %}
+
+{% block title %} My Profile {% endblock %}
+
+
+{% block content %}
+
+<div class="leftcolumn" style="width:100%">
+    <div class="card" style="background:#ddd">
+    <span class="profile_attributes">
+      {%if show or show2 or show3%}
+      <a href="{{ url_for('go_to_profile') }}">
+        {%endif%}
+      <img src="{{url_for('static',filename='uploads/')}}{{current_user.email}}/profile/{{current_user.image}}" width="100" height="100">
+      {%if show or show2%}
+      </a>
+      {%endif%}
+      <p><b><a href="{{ url_for('go_to_profile', show=True) }}" style="color:black">Profile</a></b></p>
+      {%if show%}
+      <form action="{{ url_for('go_to_profile') }}" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" required="true" accept="image/jpeg" id="file-input">
+        <br>
+        <br>
+        <input type="submit" class="btn btn-success custom" value="Update">
+      </form>
+      {%endif%}
+      
+      {%if not show%}
+      {%if not show3%}
+      {%if not show2%}
+      <p><b>Date Joined: {{current_user.since}}</b></p>
+      <p><b>Last Session: {{current_user.last}}</b></p>
+      <p><b>Email: {{current_user.email}}</b></p>
+      {%endif%}
+      {%endif%}
+      {%if not show3%}
+      <p><b><a href="{{ url_for('go_to_profile_username', show2=True) }}" style="color:black">Username:</a> {{current_user.username}}</b></p>
+      {%if show2%}
+      <form method="POST" action="{{ url_for('go_to_profile_username') }}">
+        {{ form.hidden_tag() }}
+        {{ form.username }}
+        <br>
+        <br>
+        <input type="submit" class="btn btn-success custom" value="Update" onclick="return confirm('Are you sure you want to update your username?');">
+     </form>
+     {%endif%}
+     {%endif%}
+     {%if not show2%}
+     <p><b><a href="{{ url_for('go_to_profile_password', show3=True) }}" style="color:black">Password:</a> ***********</b></p>
+      {%if show3%}
+      <form method="POST" action="{{ url_for('go_to_profile_password') }}">
+        {{ form.hidden_tag() }}
+        <input type="password" id="password" name="password" placeholder="Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Password, must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" autocomplete="off">
+        <br>
+        <input type="password" id="confirm" name="confirm" placeholder="Confirm Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Password, must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" autocomplete="off" onkeyup='check();'>
+        <br>
+        <br>
+        <input type="submit" class="btn btn-success custom" value="Update" onclick="return confirm('Are you sure you want to update your password?');">
+      </form>
+      {%endif%}
+      {%endif%}
+      {%endif%}
+
+      {%if not show%}
+      {%if not show3%}
+      {%if not show2%}
+
+      <p><a style="color:red" href="{{ url_for('go_to_profile_deleteaccount') }}" onclick="return confirm('Are you sure you want to delete this account?');">Delete Account</a></p>
+
+      {%endif%}
+      {%endif%}
+      {%endif%}
+
+      <br>
+
+    <p id="message">
+      {% with messages = get_flashed_messages() %}
+      <br>
+      {% if messages %}
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+      </p>
+      
+    </span>
+    
+    </div>
+    
+  </div>
+ 
+{% endblock %}
