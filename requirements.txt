@@ -9,9 +9,6 @@ appscript==1.1.2
 argon2-cffi==21.3.0
 argon2-cffi-bindings==21.2.0
 arrow==1.2.3
-astroid==2.14.2
-astropy==5.1
-asttokens==2.0.5
 async-timeout==4.0.2
 atomicwrites==1.4.0
 attrs==22.1.0
