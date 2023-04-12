@@ -7,7 +7,7 @@ from forms import SignUpForm, LoginForm, ProfileUserUpdateForm, ProfilePassUpdat
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from threading import Thread
-from AI_model import predict_disease
+#from AI_model import predict_disease
 import matplotlib.pyplot as plt
 import os, csv
 
@@ -27,10 +27,13 @@ s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 db.app = app
 db.init_app(app)
 
+app.app_context().push()
+
 #Creates and initalizes database. 
 #Only creates database if database.db is missing,
 #if not the existing database.db will be used.
 db.create_all()
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -187,7 +190,9 @@ def dashboard():
         file_hold.save(Path)
         #--------------------------------------------------------
         img = plt.imread(Path)
-        severity_percentage,classification = predict_disease(img)
+        #severity_percentage,classification = predict_disease(img)
+        classification = "early"
+        severity_percentage = 5
         
         userr = User.query.filter_by(email=current_user.email).first()
         now = datetime.now()
@@ -384,4 +389,4 @@ def go_to_diseases():
 
 
 if __name__ == "__main__":
-    app.run(port=8000, debug=True)
+     app.run(host='127.0.0.1', port=8080, debug=True)
