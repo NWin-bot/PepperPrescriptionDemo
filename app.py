@@ -7,7 +7,7 @@ from forms import SignUpForm, LoginForm, ProfileUserUpdateForm, ProfilePassUpdat
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from threading import Thread
-#from AI_model import predict_disease
+from AI_model import predict_disease
 import matplotlib.pyplot as plt
 import os, csv
 
@@ -27,13 +27,10 @@ s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 db.app = app
 db.init_app(app)
 
-app.app_context().push()
-
 #Creates and initalizes database. 
 #Only creates database if database.db is missing,
 #if not the existing database.db will be used.
 db.create_all()
-
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -85,7 +82,7 @@ def reset():
         
         #Sending of email confirmation link for password reset
         token = s.dumps(form.email.data, salt='recover-key')
-        msg = Message('Pepper Prescription - Password Reset', sender='nickwinter01@gmail.com', recipients=[form.email.data])
+        msg = Message('Pepper Prescription - Password Reset', sender='', recipients=[form.email.data])
         link = url_for('reset_with_token', token=token, _external=True)
         msg.body = 'Hi ' + user.username + ', please confirm your email to reset your password {}'.format(link)
         thr = Thread(target=send_async_email, args=[app, msg])
@@ -144,7 +141,7 @@ def signup():
 
         #Sending of email confirmation link
         token = s.dumps(form.email.data, salt='email-confirm')
-        msg = Message('Pepper Prescription - Email Verification', sender='nickwinter01@gmail.com', recipients=[form.email.data])
+        msg = Message('Pepper Prescription - Email Verification', sender='', recipients=[form.email.data])
         link = url_for('confirm_email', token=token, _external=True)
         msg.body = 'Hi ' + form.username.data + ', Welcome to Pepper Prescription, please confirm your email {}'.format(link)
         thr = Thread(target=send_async_email, args=[app, msg])
@@ -190,9 +187,7 @@ def dashboard():
         file_hold.save(Path)
         #--------------------------------------------------------
         img = plt.imread(Path)
-        #severity_percentage,classification = predict_disease(img)
-        classification = "early"
-        severity_percentage = 5
+        severity_percentage,classification = predict_disease(img)
         
         userr = User.query.filter_by(email=current_user.email).first()
         now = datetime.now()
@@ -389,4 +384,4 @@ def go_to_diseases():
 
 
 if __name__ == "__main__":
-     app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(port=8000, debug=True)
