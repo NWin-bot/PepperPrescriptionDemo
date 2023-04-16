@@ -120,9 +120,20 @@
             {{ session.image }}
 
        </td>
+        {% if session.severity >= 75 %}
+        <td><span style="color:red">{{ session.disease }}</span></td>
+        <td><span style="color:red">{{ session.severity }}%</span></td>
+        <td><span style="color:red">Remove Plant</span>
+        </td>
+        {% elif session.severity <=5 %}
+        <td><span style="color:purple">{{ session.disease }}</span></td>
+        <td><span style="color:purple">{{ session.severity }}%</span></td>
+        <td><span style="color:purple">Water and ensure adequate sunlight is provided.</span></td>
+        {% else %}
         <td>{{ session.disease }}</td>
         <td>{{ session.severity }}%</td>
         <td><a href="{{ url_for('go_to_diseases', disease=session.disease) }}">Read More</a></td>
+        {% endif %}
       </tr>
 
       {% endautoescape %}

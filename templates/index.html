@@ -91,18 +91,41 @@
           <div class="card">
             <img src="{{url_for('static',filename='uploads/')}}{{current_user.email}}/{{img_name}}" alt="pepperprescription" width="340" height="300">
 
+            {% if severity_percentage >= 75 %}
+            <div class="typewriter1">
+              <p><span style="color:red">Classification: {{classification}}</span></p>
+            </div>
+            <div class="typewriter2">
+              <p><span style="color:red">Severity: {{severity_percentage}}%</span></p>
+            </div>
+            {% elif severity_percentage <=5 %}
+            <div class="typewriter1">
+              <p><span style="color:purple">Classification: {{classification}}</span></p>
+            </div>
+            <div class="typewriter2">
+              <p><span style="color:purple">Severity: {{severity_percentage}}%</span></p>
+            </div>
+            {% else %}
             <div class="typewriter1">
               <p>Classification: {{classification}}</p>
             </div>
             <div class="typewriter2">
               <p>Severity: {{severity_percentage}}%</p>
             </div>
+            {% endif %}
             
           </div>
            
           <div class="card">
             
             <h1 style="font-weight:bold">Related Information</h1>
+
+            {% if severity_percentage >= 75 %}
+            <p><span style="color:red">Remove Plant</span></p>
+            {% elif severity_percentage <=5 %}
+            <p><span style="color:purple">Water and ensure adequate sunlight is provided.</span></p>
+            {% else %}
+            
 
             {% for item in diseases %}
 
@@ -154,6 +177,8 @@
             {% endautoescape %}
 
             {% endfor %}
+
+            {% endif %}
 
           </div>
 
