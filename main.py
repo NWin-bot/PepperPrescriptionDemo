@@ -109,7 +109,7 @@ def reset():
         
         #Sending of email confirmation link for password reset
         token = s.dumps(form.email.data, salt='recover-key')
-        msg = Message('Pepper Prescription - Password Reset', sender='', recipients=[form.email.data])
+        msg = Message('Pepper Prescription - Password Reset', sender='pepperprescription@gmail.com', recipients=[form.email.data])
         link = url_for('reset_with_token', token=token, _external=True)
         msg.body = 'Hi ' + user.username + ', please confirm your email to reset your password {}'.format(link)
         thr = Thread(target=send_async_email, args=[app, msg])
@@ -168,7 +168,7 @@ def signup():
 
         #Sending of email confirmation link
         token = s.dumps(form.email.data, salt='email-confirm')
-        msg = Message('Pepper Prescription - Email Verification', sender='', recipients=[form.email.data])
+        msg = Message('Pepper Prescription - Email Verification', sender='pepperprescription@gmail.com', recipients=[form.email.data])
         link = url_for('confirm_email', token=token, _external=True)
         msg.body = 'Hi ' + form.username.data + ', Welcome to Pepper Prescription, please confirm your email {}'.format(link)
         thr = Thread(target=send_async_email, args=[app, msg])
