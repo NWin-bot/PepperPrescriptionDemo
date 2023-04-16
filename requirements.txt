@@ -42,7 +42,6 @@ flask-wtf
 fonttools
 frozenlist
 google-auth
-google-colab
 greenlet
 gunicorn
 html5lib
