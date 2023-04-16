@@ -92,7 +92,7 @@ nvidia-cusparse-cu11
 nvidia-nccl-cu11
 nvidia-nvtx-cu11
 packaging
-pandas
+pandas==1.5.3
 pandocfilters
 parso
 passlib
