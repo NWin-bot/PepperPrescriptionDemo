@@ -80,6 +80,7 @@ def load_diseases():
 #Home route, displays Buttons routed to Login & Sign Up.
 @app.route('/')
 def home():
+    load_diseases()
     return render_template('home.html')
 
 #Displays login page and appropriate responses for invalid login attempts.
@@ -421,5 +422,4 @@ def go_to_diseases():
 
 
 if __name__ == "__main__":
-     load_diseases()
      app.run(host='0.0.0.0', port=81)
