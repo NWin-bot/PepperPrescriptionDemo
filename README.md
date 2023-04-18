@@ -20,6 +20,9 @@ Pepper Prescription is a disease recognition web service that gives a real-time 
        
 # Wireframes
 
+ * Mobile
+ 
+
 
        
  
