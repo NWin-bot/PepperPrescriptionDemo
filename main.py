@@ -8,6 +8,7 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from threading import Thread
 from AI_model import predict_disease
+from haralick_AI_model import predict_disease1
 import matplotlib.pyplot as plt
 import os, csv, shutil
 
@@ -80,7 +81,6 @@ def load_diseases():
 #Home route, displays Buttons routed to Login & Sign Up.
 @app.route('/')
 def home():
-    load_diseases()
     return render_template('home.html')
 
 #Displays login page and appropriate responses for invalid login attempts.
@@ -229,6 +229,41 @@ def dashboard():
         return render_template('index.html',upload_hold=True,img_name=filename,classification=classification,severity_percentage=severity_percentage,diseases=diseases)
     return render_template('index.html',upload_hold=False,img_name="")
 
+
+@app.route('/dashboard2', methods=['POST','GET'])
+@login_required
+def dashboard2():
+    if request.method=='POST':
+        file_hold=request.files['image']
+        filename=file_hold.filename
+        #Building of user folder path in static/uploads/email to store submitted jpg files.
+        user_folder = os.path.join(app.config['UPLOAD_FOLDER'], current_user.email)
+        #Creation of user folder path only if it doesn't already exist.
+        if not os.path.exists(user_folder):
+           os.makedirs(user_folder)
+        #--------------------------------------------------------------------------
+        #Saving of submitted file to user folder path.
+        filename2 = "/".join([current_user.email, filename])
+        Path=os.path.join(app.config['UPLOAD_FOLDER'], filename2)
+        file_hold.save(Path)
+        #--------------------------------------------------------
+        img = plt.imread(Path)
+        severity_percentage,classification = predict_disease1(img)
+
+        #severity_percentage=10
+        #classification="late"
+        
+        userr = User.query.filter_by(email=current_user.email).first()
+        now = datetime.now()
+        dt_string = now.strftime("%d/%b/%Y %-I:%M %p")
+        session = Session(date=dt_string,disease=classification,severity=severity_percentage,image=filename,user=userr)
+        db.session.add(session)
+        db.session.commit()
+        
+        #Querying of Disease database to return, related disease information for dashboard page.
+        diseases = Disease.query.filter(Disease.disease.like('%' + classification + '%') | Disease.description.like('%' + classification + '%')).all()
+        return render_template('index2.html',upload_hold=True,img_name=filename,classification=classification,severity_percentage=severity_percentage,diseases=diseases)
+    return render_template('index2.html',upload_hold=False,img_name="")
 
 #Displays aboutus route to logged in user.
 @app.route('/aboutus')
@@ -422,4 +457,5 @@ def go_to_diseases():
 
 
 if __name__ == "__main__":
+     load_diseases()
      app.run(host='0.0.0.0', port=81)

@@ -30,7 +30,7 @@
     </div>
   </div>
         
-      <a href="{{ url_for('dashboard') }}">
+      <a href="{{ url_for('dashboard2') }}">
             <img src="{{url_for('static',filename='image/PepperPrescriptionLogo.png')}}" alt="" class="prescriptionlogo" width="300" height="200">
       </a>
       
@@ -39,7 +39,7 @@
     
     <nav class="navbar navbar-expand navbar-dark bg-dark">
       <div class="container-fluid">
-      
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -47,7 +47,7 @@
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                K-Means
+                Haralick
               </a>
               <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                 <li><a class="dropdown-item" href="{{ url_for('dashboard') }}">K-Means</a></li>
@@ -55,7 +55,7 @@
               </ul>
             </li>
           </ul>
-        
+          
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -95,7 +95,7 @@
             <h3><u>Welcome to Pepper Prescription</u></h3>
             <h6>Disclaimer: For optimum results <span style="color:red;font-weight:bold;">Select</span> or <span style="color:red;font-weight:bold;">Capture</span> a <span style="color:black;font-weight:bold;">single leaf</span> on a <span style="color:black;font-weight:bold;">white background</span>.</h6>
             
-            <form action="{{ url_for('dashboard') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ url_for('dashboard2') }}" method="POST" enctype="multipart/form-data">
                 <input type="file" name="image" required="true" accept="image/jpeg" id="file-input">
                 <br>
                 <br>
