@@ -58,7 +58,7 @@ Pepper Prescription is a disease recognition web service that gives a real-time 
  
  https://www.youtube.com/watch?v=oaskyDkZmfI
  
- Do use this link to view the video demo of the final presentation.
+ Do use this link to view the demo video of the final presentation.
  
  # Members
  
