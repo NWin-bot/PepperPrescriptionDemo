@@ -42,25 +42,25 @@ Pepper Prescription is a disease recognition web service that gives a real-time 
  
  # Class Diagram
  
- ![class diagram](https://user-images.githubusercontent.com/60389346/232684831-eeae6503-df40-487c-b25a-e00cd9e667c3.png)
+ ![class](https://user-images.githubusercontent.com/60389346/232865305-cf97db71-b2d9-4775-b92a-065f7e194ed4.png)
  
 ---
  
  # ERD Diagram
  
- ![erd diagram](https://user-images.githubusercontent.com/60389346/232684954-5bd9c56e-43ea-45fe-a4c8-51e2696e83ef.png)
+ ![erd](https://user-images.githubusercontent.com/60389346/232865302-c98ea67a-e720-4458-a4b7-3d89d540ecd9.png)
  
 ---
  
  # Sequence Diagram
  
- ![sequence diagram](https://user-images.githubusercontent.com/60389346/232685089-67db5420-4d91-4e91-9374-6c789a747d0d.png)
+ ![sequence](https://user-images.githubusercontent.com/60389346/232865291-c3dd9b02-30dd-4d9a-9606-56c84a7a5f64.png)
  
 ---
  
  # Use Case Diagram
  
- ![TechMasters_UseCase](https://user-images.githubusercontent.com/60389346/232685291-825f01b4-ec4c-48fe-83f3-399c46ea4b5c.png)
+ ![use case](https://user-images.githubusercontent.com/60389346/232865298-32e48a50-c3d5-43d8-ab88-02b4b9c70378.png)
  
 ---
  
